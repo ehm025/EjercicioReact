@@ -1,66 +1,66 @@
-import { useState } from 'react';
-import { validateQuadraticForm } from '../utils/formValidation';
-import { calculateQuadraticFormula } from '../utils/quadraticFormula';
+import {useState} from 'react';
+import {validateQuadraticForm} from '../utils/formValidation';
+import {calculateQuadraticFormula} from '../utils/quadraticFormula';
 
 export const useQuadraticForm = () => {
-  const [formData, setFormData] = useState({
-    a: '',
-    b: '',
-    c: ''
-  });
-  const [results, setResults] = useState(null);
-  const [errors, setErrors] = useState({});
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
+    const [formData, setFormData] = useState({
+        a: '',
+        b: '',
+        c: ''
     });
-  };
+    const [results, setResults] = useState(null);
+    const [errors, setErrors] = useState({});
 
-  const validateForm = () => {
-    const newErrors = validateQuadraticForm(formData);
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+    const handleChange = (e) => {
+        const {name, value} = e.target;
+        setFormData({
+            ...formData,
+            [name]: value
+        });
+    };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+    const validateForm = () => {
+        const newErrors = validateQuadraticForm(formData);
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
 
-    if (validateForm()) {
-      try {
-        const a = parseFloat(formData.a);
-        const b = parseFloat(formData.b);
-        const c = parseFloat(formData.c);
-        
-        const result = calculateQuadraticFormula(a, b, c);
-        setResults(result);
+    const handleSubmit = (e) => {
+        e.preventDefault();
 
-        window.alertify.success('Cálculo realizado con éxito');
-      } catch (error) {
-        window.alertify.error('Error al calcular: ' + error.message);
-      }
-    } else {
-      Object.values(errors).forEach(error => {
-        window.alertify.error(error);
-      });
-    }
-  };
+        if (validateForm()) {
+            try {
+                const a = parseFloat(formData.a);
+                const b = parseFloat(formData.b);
+                const c = parseFloat(formData.c);
 
-  const resetForm = () => {
-    setFormData({ a: '', b: '', c: '' });
-    setResults(null);
-    setErrors({});
-    window.alertify.message('Formulario reiniciado');
-  };
+                const result = calculateQuadraticFormula(a, b, c);
+                setResults(result);
 
-  return {
-    formData,
-    results,
-    errors,
-    handleChange,
-    handleSubmit,
-    resetForm
-  };
+                window.alertify.success('Cálculo realizado con éxito');
+            } catch (error) {
+                window.alertify.error('Error al calcular: ' + error.message);
+            }
+        } else {
+            Object.values(errors).forEach(error => {
+                window.alertify.error(error);
+            });
+        }
+    };
+
+    const resetForm = () => {
+        setFormData({a: '', b: '', c: ''});
+        setResults(null);
+        setErrors({});
+        window.alertify.message('Formulario reiniciado');
+    };
+
+    return {
+        formData,
+        results,
+        errors,
+        handleChange,
+        handleSubmit,
+        resetForm
+    };
 };
